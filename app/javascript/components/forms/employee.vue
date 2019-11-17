@@ -1,5 +1,7 @@
 <template>
     <form v-on:submit.prevent>
+        <h1 v-if="!editing" class="display-4">New Employee</h1>
+        <h1 v-if="editing" class="display-4">Edit Employee</h1>
         <div class="form-group">
             <label>Name</label>
             <input v-model="name" type="text" class="form-control" placeholder="Enter name">

@@ -1,12 +1,3 @@
-<div class="container">
-    <div class="row">
-        <div class="col-xl">
-            <div class="card ecf">
-                <div class="card-body">
-                    <h1 class="display-4">New Employee</h1>
-                    <employee :edit=false />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<%= render 'layouts/partials/card_form' %>
+    <employee :edit=false />
+<%= render 'layouts/partials/card_form_base' %>

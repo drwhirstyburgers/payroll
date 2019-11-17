@@ -1,5 +1,5 @@
-<h1>New Payroll Report</h1>
+<%= render 'layouts/partials/card_form' %>
+    <h1>New Payroll Report</h1>
+    <%= render 'form', payroll_report: @payroll_report %>
+<%= render 'layouts/partials/card_form_base' %>
 
-<%= render 'form', payroll_report: @payroll_report %>
-
-<%= link_to 'Back', payroll_reports_path %>
