@@ -26,7 +26,9 @@ import Vue from 'vue/dist/vue.esm'
 import navbar from '../components/layouts/navbar'
 import employee from '../components/forms/employee'
 import payrollreport from '../components/forms/payrollreport'
+import VuePapaParse from 'vue-papa-parse'
 
+Vue.use(VuePapaParse)
 Vue.use(TurbolinksAdapter)
 
 document.addEventListener('turbolinks:load', () => {
