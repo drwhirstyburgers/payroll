@@ -15,10 +15,10 @@
     <table v-if="submitted" class="table">
         <thead class="thead-dark">
             <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Hours Worked</th>
-            <th scope="col">Employee ID</th>
-            <th scope="col">Job Group</th>
+                <th scope="col">Date</th>
+                <th scope="col">Hours Worked</th>
+                <th scope="col">Employee ID</th>
+                <th scope="col">Job Group</th>
             </tr>
         </thead>
         <tbody>
