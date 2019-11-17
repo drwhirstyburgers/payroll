@@ -17,7 +17,7 @@ class PayrollReportsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create payroll_report" do
     assert_difference('PayrollReport.count') do
-      post payroll_reports_url, params: { payroll_report: { date: @payroll_report.date, employee_id: @payroll_report.employee_id, hours_worked: @payroll_report.hours_worked, job_groub: @payroll_report.job_groub, report_id: @payroll_report.report_id } }
+      post payroll_reports_url, params: { payroll_report: { name: @payroll_report.name } }
     end
 
     assert_redirected_to payroll_report_url(PayrollReport.last)
@@ -34,7 +34,7 @@ class PayrollReportsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update payroll_report" do
-    patch payroll_report_url(@payroll_report), params: { payroll_report: { date: @payroll_report.date, employee_id: @payroll_report.employee_id, hours_worked: @payroll_report.hours_worked, job_groub: @payroll_report.job_groub, report_id: @payroll_report.report_id } }
+    patch payroll_report_url(@payroll_report), params: { payroll_report: { name: @payroll_report.name } }
     assert_redirected_to payroll_report_url(@payroll_report)
   end
 

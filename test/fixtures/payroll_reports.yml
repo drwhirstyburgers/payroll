@@ -1,15 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  date: 2019-11-16 20:29:52
-  hours_worked: 1.5
-  employee_id: 1
-  job_groub: MyString
-  report_id: 1
+  name: MyString
 
 two:
-  date: 2019-11-16 20:29:52
-  hours_worked: 1.5
-  employee_id: 1
-  job_groub: MyString
-  report_id: 1
+  name: MyString

@@ -14,11 +14,7 @@ class PayrollReportsTest < ApplicationSystemTestCase
     visit payroll_reports_url
     click_on "New Payroll Report"
 
-    fill_in "Date", with: @payroll_report.date
-    fill_in "Employee", with: @payroll_report.employee_id
-    fill_in "Hours worked", with: @payroll_report.hours_worked
-    fill_in "Job groub", with: @payroll_report.job_groub
-    fill_in "Report", with: @payroll_report.report_id
+    fill_in "Name", with: @payroll_report.name
     click_on "Create Payroll report"
 
     assert_text "Payroll report was successfully created"
@@ -29,11 +25,7 @@ class PayrollReportsTest < ApplicationSystemTestCase
     visit payroll_reports_url
     click_on "Edit", match: :first
 
-    fill_in "Date", with: @payroll_report.date
-    fill_in "Employee", with: @payroll_report.employee_id
-    fill_in "Hours worked", with: @payroll_report.hours_worked
-    fill_in "Job groub", with: @payroll_report.job_groub
-    fill_in "Report", with: @payroll_report.report_id
+    fill_in "Name", with: @payroll_report.name
     click_on "Update Payroll report"
 
     assert_text "Payroll report was successfully updated"
