@@ -6,7 +6,15 @@
                 <h1 class="display-4">New Report</h1>
             </div>
             <div class='col-md-6'>
-                <button type="button" class="btn btn-primary float-right">Submit</button>
+                <button v-on:click="submitReport" type="button" class="btn btn-primary float-right">Submit</button>
+            </div>
+        </div>
+        <div v-if="isError" class="row">
+            <div v-on:click="isError = false" class="card">
+                <div class="card-body">
+                    <h4>Oops! Looks like something went awry, please try again!</h4>
+                    <p>{{ errorMessage }}</p>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -31,7 +39,9 @@ export default {
         return {
             csv: [],
             name: '',
-            submitted: false
+            submitted: false,
+            isError: false,
+            errorMessage: ''
         }
     },
     components: { reporttable },
@@ -55,37 +65,32 @@ export default {
             reader.readAsText(fileToLoad)
             that.submitted = true
         },
+        submitReport(){
+            if(this.name != '' && this.csv != []){
+                this.csv = JSON.stringify(this.csv)
+                $.ajax({
+                    type: "POST",
+                    url: '/payroll_reports',
+                    data: { name: this.name, csv: this.csv },
+                    success: (data) => {
+                        console.log(data)
+                    },
+                    error: (err) => {
+                        console.log(err)
+                        this.isError = true
+                    }
+                })
+            } else {
+                this.isError = true
+                this.errorMessage = "You must have both a report imported and a name for your report"
+            }
+        }
     }
 }
 </script>
 
 <style lang="scss">
-  .dropbox {
-    outline: 2px dashed grey; /* the dash box */
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    min-height: 200px; /* minimum height */
-    position: relative;
-    cursor: pointer;
-  }
-
-  .input-file {
-    opacity: 0; /* invisible but it's there! */
+.card {
     width: 100%;
-    height: 200px;
-    position: absolute;
-    cursor: pointer;
-  }
-
-  .dropbox:hover {
-    background: lightblue; /* when mouse over to the drop zone, change color */
-  }
-
-  .dropbox p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  }
+}
 </style>
