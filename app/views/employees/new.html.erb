@@ -1,10 +1,10 @@
 <div class="container">
     <div class="row">
         <div class="col-xl">
-            <div class="card" id="ecf">
+            <div class="card ecf">
                 <div class="card-body">
                     <h1 class="display-4">New Employee</h1>
-                    <%= render 'form', employee: @employee %>
+                    <employee :edit=false />
                 </div>
             </div>
         </div>

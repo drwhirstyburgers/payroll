@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
 
   # GET /employees
   # GET /employees.json
