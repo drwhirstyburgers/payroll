@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Job Groups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Wage</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @job_groups.each do |job_group| %>
+      <tr>
+        <td><%= job_group.name %></td>
+        <td><%= job_group.wage %></td>
+        <td><%= link_to 'Show', job_group %></td>
+        <td><%= link_to 'Edit', edit_job_group_path(job_group) %></td>
+        <td><%= link_to 'Destroy', job_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Job Group', new_job_group_path %>
