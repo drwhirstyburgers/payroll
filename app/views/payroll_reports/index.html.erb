@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Payroll Reports</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Hours worked</th>
+      <th>Employee</th>
+      <th>Job groub</th>
+      <th>Report</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @payroll_reports.each do |payroll_report| %>
+      <tr>
+        <td><%= payroll_report.date %></td>
+        <td><%= payroll_report.hours_worked %></td>
+        <td><%= payroll_report.employee_id %></td>
+        <td><%= payroll_report.job_groub %></td>
+        <td><%= payroll_report.report_id %></td>
+        <td><%= link_to 'Show', payroll_report %></td>
+        <td><%= link_to 'Edit', edit_payroll_report_path(payroll_report) %></td>
+        <td><%= link_to 'Destroy', payroll_report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Payroll Report', new_payroll_report_path %>

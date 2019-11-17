@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @payroll_report.date %>
+</p>
+
+<p>
+  <strong>Hours worked:</strong>
+  <%= @payroll_report.hours_worked %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @payroll_report.employee_id %>
+</p>
+
+<p>
+  <strong>Job groub:</strong>
+  <%= @payroll_report.job_groub %>
+</p>
+
+<p>
+  <strong>Report:</strong>
+  <%= @payroll_report.report_id %>
+</p>
+
+<%= link_to 'Edit', edit_payroll_report_path(@payroll_report) %> |
+<%= link_to 'Back', payroll_reports_path %>

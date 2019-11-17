@@ -1,0 +1,42 @@
+<%= form_with(model: payroll_report, local: true) do |form| %>
+  <% if payroll_report.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(payroll_report.errors.count, "error") %> prohibited this payroll_report from being saved:</h2>
+
+      <ul>
+        <% payroll_report.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.datetime_select :date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :hours_worked %>
+    <%= form.text_field :hours_worked %>
+  </div>
+
+  <div class="field">
+    <%= form.label :employee_id %>
+    <%= form.number_field :employee_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :job_groub %>
+    <%= form.text_field :job_groub %>
+  </div>
+
+  <div class="field">
+    <%= form.label :report_id %>
+    <%= form.number_field :report_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
