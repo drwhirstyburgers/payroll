@@ -25,6 +25,7 @@ import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import navbar from '../components/layouts/navbar'
 import employee from '../components/forms/employee'
+import payrollreport from '../components/forms/payrollreport'
 
 Vue.use(TurbolinksAdapter)
 
@@ -34,6 +35,6 @@ document.addEventListener('turbolinks:load', () => {
     data: () => {
       return {}
     },
-    components: { navbar, employee }
+    components: { navbar, employee, payrollreport }
   })
 })

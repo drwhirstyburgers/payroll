@@ -1,6 +1,7 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
-  skip_before_action :verify_authenticity_token
+  # I know this is bad practice, but sometimes when I generate new models, the controllers don't work properly and as I am on time constraints I didn't want to remake the models/migrations
+  skip_before_action :verify_authenticity_token 
 
   # GET /employees
   # GET /employees.json
