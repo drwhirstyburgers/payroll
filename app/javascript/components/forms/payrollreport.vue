@@ -1,7 +1,14 @@
 <template>
 <div>
     <form>
-        <h1 class="display-4">New Report</h1>
+        <div class="row">
+            <div class='col-md-6'>
+                <h1 class="display-4">New Report</h1>
+            </div>
+            <div class='col-md-6'>
+                <button type="button" class="btn btn-primary float-right">Submit</button>
+            </div>
+        </div>
         <div class="form-group">
             <label>Report Name</label>
             <input v-model="name" type="text" class="form-control" placeholder="Enter the report name">

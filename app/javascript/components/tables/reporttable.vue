@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="cs in submittedCsv" v-bind:cs="cs" v-bind:key="cs.key">
+            <tr v-for="cs in csv" v-bind:cs="cs" v-bind:key="cs.key">
                 <td>{{ cs.date }}</td>
                 <td>{{ cs.hours_worked }}</td>
                 <td>{{ cs.employee_id }}</td>
@@ -23,7 +23,8 @@
 export default {
     data() {
         return {
-            csv: []
+            csv: [],
+            isEditing: {index: -1, type: "none"}
         }
     },
     props: ['submittedCsv'],
@@ -31,6 +32,15 @@ export default {
         submittedCsv: function () {
             this.csv = this.submittedCsv
         }
+    },
+    methods: {
+        
     }
 }
 </script>
+
+<style scoped>
+td:hover {
+    background-color: lightgray;
+}
+</style>
