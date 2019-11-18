@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="input-group mb-3" id="search">
+        <div v-if="this.reports.length > 0" class="input-group mb-3" id="search">
             <input v-model="reportSearch" type="text" class="form-control" placeholder="Search by report name...">
         </div>
         <ul class="list-group">
@@ -27,9 +27,13 @@ export default {
             })
         },
     },
+    watch: {
+        all_reports: function(){
+            this.reports = this.all_reports
+        }
+    },
     methods: {
         selectReport(report){
-            console.log(report)
             const reportPicked = report
             this.$emit('selected', reportPicked)
         }

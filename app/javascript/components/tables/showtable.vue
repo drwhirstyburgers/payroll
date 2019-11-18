@@ -25,7 +25,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="cs in reportData" v-bind:cs="cs" v-bind:key="cs.key">
+                            <tr v-on:click="displayOnConsole(cs)" v-for="cs in reportData" v-bind:cs="cs" v-bind:key="cs.key">
                                 <td>{{ cs.date }}</td>
                                 <td>{{ cs.hours_worked }}</td>
                                 <td>{{ cs.employee_id }}</td>
@@ -60,11 +60,13 @@ export default {
                     console.log(err)
                 },
                 success: (data) => {
-                    this.reportData = data.filter((d) => {
+                    this.reportData = data.report_data.filter((d) => {
                         if(d.date != "report id"){
                             return d
                         }
                     })
+                    const wageData = data.wage_data
+                    this.$emit('dataProvided', wageData)
                 }
 
             })
@@ -104,6 +106,10 @@ export default {
             return this.reportData.sort(function(a, b) { 
                 return new Date(b.date.split('/').reverse().join()) - new Date(a.date.split('/').reverse().join()) 
             })
+        },
+        displayOnConsole(cs){
+            const row = cs
+            this.$emit('changeRow', cs)
         }
     }
 }

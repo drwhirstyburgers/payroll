@@ -3,6 +3,8 @@ class PayrollReportsController < ApplicationController
   include ReportOrganizer
   require 'update_user_jg'
   include UpdateUserJg
+  require 'payroll_math'
+  include PayrollMath
   require 'json'
 
   before_action :set_payroll_report, only: [:edit, :update, :destroy]
@@ -100,7 +102,11 @@ class PayrollReportsController < ApplicationController
 
   def get_data
     @report_data = Row.where(payroll_report_id: params[:id])
-    render json: @report_data.to_json, status: :ok
+    wage_data = returns_all_calculations_as_hash(@report_data)
+    return_hash = {}
+    return_hash[:wage_data] = wage_data
+    return_hash[:report_data] = @report_data
+    render json: return_hash.to_json, status: :ok
   end
 
   private

@@ -11,10 +11,23 @@
 export default {
     data(){
         return {
-
+            report: this.reportData,
+            selectedRow: {},
+            wageData: this.wage_data
         }
     },
-    props: ['reportData']
+    watch: {
+        reportData: function(){
+            this.report = this.reportData
+        },
+        row: function(){
+            this.selectedRow  = this.row
+        },
+        wage_data: function(){
+            this.wageData  = this.wage_data
+        }
+    },
+    props: ['reportData', 'row', 'wage_data']
 }
 </script>
 
