@@ -27,7 +27,7 @@
             @change="submitFile" multiple>
         </div>
     </form>
-    <reporttable v-if="submitted && !stepTwo" :submittedCsv="csv" :submitted="submitted"/>
+    <reporttable v-if="submitted && !stepTwo" :submitted_csv="csv" :submitted="submitted"/>
     <div v-if="stepTwo">
         <div v-if="newEmploy != null">
             <h1 class="display-4">New Employees</h1>

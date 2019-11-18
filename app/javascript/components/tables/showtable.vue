@@ -99,7 +99,7 @@ export default {
 
 <style scoped>
 .card.show-card {
-    height: 100vh;
+    height: 95vh;
     overflow: hidden;
     overflow: scroll;
 }

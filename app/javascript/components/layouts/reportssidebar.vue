@@ -31,7 +31,7 @@ export default {
 }
 
 .list-group {
-    height: 100vh;
+    height: 95vh;
     overflow: scroll;
     overflow-x: hidden;
 }

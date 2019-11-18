@@ -23,13 +23,13 @@
 export default {
     data() {
         return {
-            csv: [],
+            csv: this.submitted_csv,
         }
     },
-    props: ['submittedCsv'],
+    props: ['submitted_csv'],
     watch: {
-        submittedCsv: function () {
-            this.csv = this.submittedCsv
+        submitted_csv: function () {
+            this.csv = this.submitted_csv
         }
     },
     methods: {

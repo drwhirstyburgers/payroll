@@ -11,13 +11,14 @@ class PayrollReportsController < ApplicationController
   # GET /payroll_reports
   # GET /payroll_reports.json
   def index
-    @payroll_reports = PayrollReport.all
+    @payroll_reports = PayrollReport.all.order(created_at: :desc)
   end
 
   # GET /payroll_reports/1
   # GET /payroll_reports/1.json
   def show
     @payroll_report = PayrollReport.includes(:rows).find(params[:id])
+    @row_data = @payroll_report.rows
   end
 
   # GET /payroll_reports/new
