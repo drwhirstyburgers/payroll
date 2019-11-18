@@ -6,18 +6,25 @@ module ReportOrganizer
         end
     end
 
-    def get_report_id(csv)
-        raw_end = csv.pop
-        return raw_end[:hours_worked]
-    end
+    #def get_report_id(csv)
+    #    raw_end = csv.pop
+    #   return raw_end[:hours_worked]
+    #end
     
     def create_row(csv_row, payroll_report)
+        #date = convert_date(csv_row[:date])
+        #convert_date(date)
         row = payroll_report.rows.build(date: csv_row[:date], hours_worked: csv_row[:hours_worked], employee_id: csv_row[:employee_id], job_group: csv_row[:job_group])
         row.save!
     end
     
     #def convert_date(date)
-    #    Date.parse(date)
+    #    if date != nil || date != ''
+    #        unless date.include?(['a'..'z'])
+    #            puts date
+    #            return Date.parse(date)
+    #        end
+    #    end
     #end
 
     def generate_new_employees(employee_ids)

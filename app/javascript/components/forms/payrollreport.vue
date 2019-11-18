@@ -11,7 +11,7 @@
         </div>
         <div v-if="isError" class="row">
             <div v-on:click="isError = false" class="card">
-                <div class="card-body">
+                <div class="card-body" id="error-card">
                     <h4>Oops! Looks like something went awry, please try again!</h4>
                     <p>{{ errorMessage }}</p>
                 </div>
@@ -23,7 +23,7 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlFile1">Sales Report</label>
-            <input type="file" id="file" ref="myFiles" class="form-control-file" 
+            <input type="file" id="file" class="form-control-file" 
             @change="submitFile" multiple>
         </div>
     </form>
@@ -72,7 +72,8 @@ export default {
             newEmploy: [],
             newJobGroups: [],
             stepTwo: false,
-            reportId: null
+            reportId: null,
+            componentKey:0
         }
     },
     components: { reporttable },
@@ -112,7 +113,8 @@ export default {
                     },
                     error: (err) => {
                         console.log(err)
-                        this.isError = true
+                        alert("Error, please try again")
+                        location.reload(true);
                     }
                 })
             } else {
@@ -131,7 +133,7 @@ export default {
                     console.log(err)
                 }
             })
-        }
+        },
     }
 }
 </script>
@@ -140,5 +142,9 @@ export default {
 .card {
     width: 100%;
     margin-bottom: 30px;
+}
+#error-card:hover {
+    background-color: rgb(238, 234, 234);
+    cursor: pointer;
 }
 </style>

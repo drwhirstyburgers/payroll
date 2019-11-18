@@ -5,6 +5,8 @@
                 <div class="card-body">
                     <div id="button-console">
                         <div class="btn-group float-right" role="group">
+                            <button v-on:click="sortByDate" type="button" class="btn btn-secondary">Date ASC</button>
+                            <button v-on:click="sortByDateDesc" type="button" class="btn btn-secondary">Date DESC</button>
                             <button v-on:click="sortByHours" type="button" class="btn btn-secondary">Hour ASC</button>
                             <button v-on:click="sortByHoursDesc" type="button" class="btn btn-secondary">Hour DESC</button>
                             <button v-on:click="sortByEmployee" type="button" class="btn btn-secondary">Employee ASC</button>
@@ -91,6 +93,16 @@ export default {
             return this.reportData.sort(function(a, b){ 
                 if(a.job_group > b.job_group){ return -1 }
                 if(a.job_group < b.job_group){ return 1 } 
+            })
+        },
+        sortByDate(){
+            return this.reportData.sort(function(a, b) { 
+                return new Date(a.date.split('/').reverse().join()) - new Date(b.date.split('/').reverse().join())
+            })
+        },
+        sortByDateDesc(){
+            return this.reportData.sort(function(a, b) { 
+                return new Date(b.date.split('/').reverse().join()) - new Date(a.date.split('/').reverse().join()) 
             })
         }
     }

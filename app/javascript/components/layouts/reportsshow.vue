@@ -4,7 +4,7 @@
             <div class="col-lg-2" id="sideNav">
                 <reportssidebar v-on:selected="passReport" :all_reports="reports" />
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <showtable :one_report="selectedReport" />
             </div>
             <div class="col-lg-2">
