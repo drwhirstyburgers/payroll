@@ -6,10 +6,10 @@ module ReportOrganizer
         end
     end
 
-    #def get_report_id(csv)
-    #    raw_end = csv.pop
-    #   return raw_end[:hours_worked]
-    #end
+    def get_report_id(csv)
+       the_one = csv.select { |r| r[:date] == "report id" }.first
+       return the_one[:hours_worked]
+    end
     
     def create_row(csv_row, payroll_report)
         #date = convert_date(csv_row[:date])

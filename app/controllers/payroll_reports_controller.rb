@@ -39,7 +39,7 @@ class PayrollReportsController < ApplicationController
     csv = params[:csv]
     csv = eval(csv)
 
-    report_id = csv.last[:hours_worked]
+    report_id = get_report_id(csv)
     @payroll_report = PayrollReport.new(name: name, report_id: report_id)
 
     employee_ids = get_employee_ids(csv)

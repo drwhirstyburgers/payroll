@@ -2,11 +2,11 @@
 <div>
     <div class="card console">
         <div class="card-body">
-            <h5 class="card-title">Report: {{ report.name }}</h5>
+            <h1 class="display-4">Report: {{ report.name }}</h1>
             <h6 class="card-text">Created on: {{ moment(report.created_at).format('MMMM Do YYYY') }}</h6>
             <h6 v-for="(value, key) in wageData.sums" v-bind:value="value" v-bind:key="value.key" class="card-text">{{ key }}: ${{ value }}</h6>
             <hr>
-            <h5 class="card-title">Employee ID: {{ selectedRow.employee_id }}</h5>
+            <h1 class="display-4">Employee ID: {{ selectedRow.employee_id }}</h1>
             <h6>Hours worked: {{ selectedRow.hours_worked }} </h6>
             <h6>Wage Group: {{ selectedRow.job_group }}</h6>
             <h6>Amount owed for shift: ${{ totalPaid }}</h6>
@@ -14,7 +14,7 @@
     </div>
     <div class="card console">
         <div class="card-body">
-            <h5 class="card-title">Report totals for employee</h5>
+            <h1 class="display-4">Report totals for employee</h1>
             <h6>Total hours: {{ totals.total_hours }}</h6>
             <h6>Total amount owed on report: ${{totals.sum_owed}}</h6>
         </div>
