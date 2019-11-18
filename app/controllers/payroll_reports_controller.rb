@@ -40,24 +40,29 @@ class PayrollReportsController < ApplicationController
     csv = eval(csv)
 
     report_id = get_report_id(csv)
-    @payroll_report = PayrollReport.new(name: name, report_id: report_id)
-
-    employee_ids = get_employee_ids(csv)
-    new_employees = generate_new_employees(employee_ids)
-
-    organize_report(csv, @payroll_report)
-
-    job_groups = get_job_groups(@payroll_report)
-    new_job_groups = generate_new_job_groups(job_groups)
-
-    if new_employees.present? || new_job_groups.present?
-      json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups, :report_id => @payroll_report.id }
-      render json: json_payload.to_json, status: :ok
+    report_uniq_check = PayrollReport.find_by(report_id: report_id)
+    if report_uniq_check.present?
+      render json: "exists".to_json, status: :unprocessable_entity
     else
-      if @payroll_report.save!
-        redirect_to payroll_reports_path
+      @payroll_report = PayrollReport.new(name: name, report_id: report_id)
+
+      employee_ids = get_employee_ids(csv)
+      new_employees = generate_new_employees(employee_ids)
+
+      organize_report(csv, @payroll_report)
+
+      job_groups = get_job_groups(@payroll_report)
+      new_job_groups = generate_new_job_groups(job_groups)
+
+      if new_employees.present? || new_job_groups.present?
+        json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups, :report_id => @payroll_report.id }
+        render json: json_payload.to_json, status: :ok
       else
-        render :new
+        if @payroll_report.save!
+          redirect_to payroll_reports_path
+        else
+          render :new
+        end
       end
     end
   end

@@ -14,6 +14,4 @@ To run:
 
 * rails s
 
-* navigate to localhost:3000
-
 

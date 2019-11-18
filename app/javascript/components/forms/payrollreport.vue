@@ -113,9 +113,12 @@ export default {
                         this.reportId = data.report_id
                     },
                     error: (err) => {
-                        console.log(err)
-                        alert("Error, please try again")
-                        location.reload(true);
+                        var error = err.responseText
+                        if(err.responseText == error){
+                            alert("Error, this report id already exists.")
+                        } else {
+                            alert("there was an error please try again")
+                        }
                     }
                 })
             } else {
