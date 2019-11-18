@@ -10,7 +10,10 @@
             <h6>Hours worked: {{ selectedRow.hours_worked }} </h6>
             <h6>Wage Group: {{ selectedRow.job_group }}</h6>
             <h6>Amount owed for shift: ${{ totalPaid }}</h6>
-            <hr>
+        </div>
+    </div>
+    <div class="card console">
+        <div class="card-body">
             <h5 class="card-title">Report totals for employee</h5>
             <h6>Total hours: {{ totals.total_hours }}</h6>
             <h6>Total amount owed on report: ${{totals.sum_owed}}</h6>
@@ -58,7 +61,7 @@ export default {
 
 <style scoped>
 .card.console {
-    height: 300px;
+    height: auto;
     margin-top: 10%;
 }
 </style>
