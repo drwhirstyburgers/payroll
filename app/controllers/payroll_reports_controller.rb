@@ -98,7 +98,10 @@ class PayrollReportsController < ApplicationController
     redirect_to payroll_report_path(report)
   end
 
-
+  def get_data
+    @report_data = Row.where(payroll_report_id: params[:id])
+    render json: @report_data.to_json, status: :ok
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

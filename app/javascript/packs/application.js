@@ -21,6 +21,7 @@ global.$ = $
 global.jQuery = $
 import 'bootstrap'
 import '../stylesheets/application'
+import moment from 'moment'
 import TurbolinksAdapter from 'vue-turbolinks'
 import Vue from 'vue/dist/vue.esm'
 import navbar from '../components/layouts/navbar'
@@ -34,7 +35,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(faEdit)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
- 
+Vue.prototype.moment = moment;
 Vue.config.productionTip = false
 
 Vue.use(VuePapaParse)
