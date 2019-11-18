@@ -26,6 +26,7 @@ import Vue from 'vue/dist/vue.esm'
 import navbar from '../components/layouts/navbar'
 import employee from '../components/forms/employee'
 import payrollreport from '../components/forms/payrollreport'
+import reportsshow from '../components/layouts/reportsshow'
 import VuePapaParse from 'vue-papa-parse'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
@@ -45,6 +46,6 @@ document.addEventListener('turbolinks:load', () => {
     data: () => {
       return {}
     },
-    components: { navbar, employee, payrollreport }
+    components: { navbar, employee, payrollreport, reportsshow }
   })
 })
