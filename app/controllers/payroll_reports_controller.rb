@@ -48,7 +48,7 @@ class PayrollReportsController < ApplicationController
     new_job_groups = generate_new_job_groups(job_groups)
 
     if new_employees.present? || new_job_groups.present?
-      json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups}
+      json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups, :report_id => @payroll_report.id }
       render json: json_payload.to_json, status: :ok
     else
       respond_to do |format|

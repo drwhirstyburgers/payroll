@@ -1,6 +1,6 @@
 <template>
 <div>
-    <form>
+    <form v-if=!stepTwo>
         <div class="row">
             <div class='col-md-6'>
                 <h1 class="display-4">New Report</h1>
@@ -27,7 +27,34 @@
             @change="submitFile" multiple>
         </div>
     </form>
-    <reporttable v-if="submitted" :submittedCsv="csv" :submitted="submitted"/>
+    <reporttable v-if="submitted && !stepTwo" :submittedCsv="csv" :submitted="submitted"/>
+    <div v-if="stepTwo">
+        <div v-if="newEmploy != null">
+            <h1 class="display-4">New Employees</h1>
+            <div v-for="employ in newEmploy" v-bind:employ="employ" v-bind:key="employ.key" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Employee ID: {{ employ.employee_id }}</h5>
+                    <div class="form-group">
+                        <label>Employee Name</label>
+                        <input v-model="employ.name" type="text" class="form-control" placeholder="Enter the employee name">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="newJobGroups != null">
+            <h1 class="display-4">New Job Groups</h1>
+            <div v-for="jobGroup in newJobGroups" v-bind:jobGroup="jobGroup" v-bind:key="jobGroup.key" class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Job Group: {{ jobGroup.name }}</h5>
+                    <div class="form-group">
+                        <label>Wage</label>
+                        <input v-model="jobGroup.wage" type="number" class="form-control" placeholder="Enter the wage amount">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button v-on:click="submitNewOnes" type="button" class="btn btn-primary float-right">Submit</button>
+    </div>
 </div>
 </template>
 
@@ -41,7 +68,11 @@ export default {
             name: '',
             submitted: false,
             isError: false,
-            errorMessage: ''
+            errorMessage: '',
+            newEmploy: [],
+            newJobGroups: [],
+            stepTwo: false,
+            reportId: null
         }
     },
     components: { reporttable },
@@ -73,7 +104,11 @@ export default {
                     url: '/payroll_reports',
                     data: { name: this.name, csv: this.csv },
                     success: (data) => {
-                        console.log(data)
+                        console.log(data.new_employees)
+                        this.newEmploy = data.new_employees
+                        this.newJobGroups = data.new_job_groups
+                        this.stepTwo = true
+                        this.reportId = data.report_id
                     },
                     error: (err) => {
                         console.log(err)
@@ -84,6 +119,16 @@ export default {
                 this.isError = true
                 this.errorMessage = "You must have both a report imported and a name for your report"
             }
+        },
+        submitNewOnes(){
+            $.ajax({
+                type: "PUT",
+                url: '/payroll_reports/return_new_items',
+                data: { employees: this.newEmploy, job_groups: this.newJobGroups, report_id: this.reportId },
+                error: (err) => {
+                    console.log(err)
+                }
+            })
         }
     }
 }
@@ -92,5 +137,6 @@ export default {
 <style lang="scss">
 .card {
     width: 100%;
+    margin-bottom: 30px;
 }
 </style>
