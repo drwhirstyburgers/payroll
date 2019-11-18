@@ -54,13 +54,10 @@ class PayrollReportsController < ApplicationController
       json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups, :report_id => @payroll_report.id }
       render json: json_payload.to_json, status: :ok
     else
-      respond_to do |format|
-        if @payroll_report.save!
-          format.html { redirect_to payroll_reports_path, notice: 'Payroll report was successfully created.' }
-        else
-          format.html { render :new }
-          format.json { render json: @payroll_report.errors, status: :unprocessable_entity }
-        end
+      if @payroll_report.save!
+        redirect_to payroll_reports_path
+      else
+        render :new
       end
     end
   end
@@ -97,7 +94,7 @@ class PayrollReportsController < ApplicationController
     update_employees(employees)
     update_job_groups(job_groups)
 
-    redirect_to payroll_report_path(report)
+    redirect_to payroll_reports_path
   end
 
   def get_data

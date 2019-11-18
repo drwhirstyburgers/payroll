@@ -60,6 +60,7 @@
 
 <script>
 import reporttable from '../tables/reporttable'
+import { all } from 'q'
 
 export default {
     data() {
@@ -134,6 +135,27 @@ export default {
                 }
             })
         },
+        isEmpty(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        },
+        allEmpty(arr){
+            const count = arr.length
+            const trueCount = 0
+            arr.forEach((obj) => {
+                if(this.isEmpty(obj)){
+                    return false
+                } else {
+                    trueCount++
+                    if(trueCount == count){
+                        return true
+                    }
+                }
+            })
+        }
     }
 }
 </script>
