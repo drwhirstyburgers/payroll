@@ -2,6 +2,7 @@
     <form v-on:submit.prevent>
         <h1 v-if="!editing" class="display-4">New Employee</h1>
         <h1 v-if="editing" class="display-4">Edit Employee</h1>
+        <h1 v-if="isError" v-on:click="isError = false" class="display-4">You must provide an employee ID and name and the ID must be unique</h1>
         <div class="form-group">
             <label>Name</label>
             <input v-model="name" type="text" class="form-control" placeholder="Enter name">
@@ -21,7 +22,8 @@ export default {
             name: '',
             employeeId: null,
             editing: false,
-            employee: {}
+            employee: {},
+            isError: false
         }
     },
     props: ['edit'],
@@ -30,23 +32,27 @@ export default {
     },
     methods: {
         sendForm(){
-            if(this.editing == true){
-                $.ajax({
-                    type: 'PUT',
-                    url: '/employees/' + this.employee.id,
-                    data: { employee: { name: this.name, employee_id: this.employeeId } },
-                    error: (err) => {
-                        console.log(err)
-                    }
-                })
+            if(this.employeeId == null || this.employeeId == ''){
+                this.isError = true
             } else {
-                if(this.name != '' && this.employeeId != null){
+                if(this.editing == true){
+                    $.ajax({
+                        type: 'PUT',
+                        url: '/employees/' + this.employee.id,
+                        data: { employee: { name: this.name, employee_id: this.employeeId } },
+                        error: (err) => {
+                            console.log(err)
+                            this.isError = true
+                        }
+                    })
+                } else {
                     $.ajax({
                         type: 'POST',
                         url: '/employees',
                         data: { employee: { name: this.name, employee_id: this.employeeId } },
                         error: (err) => {
                             console.log(err)
+                            this.isError = true
                         }
                     })
                 }
