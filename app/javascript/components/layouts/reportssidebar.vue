@@ -29,4 +29,10 @@ export default {
     background-color: lightgray;
     cursor: pointer;
 }
+
+.list-group {
+    height: 100vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}
 </style>

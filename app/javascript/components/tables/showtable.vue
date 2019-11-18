@@ -4,7 +4,7 @@
             <div class="card show-card">
                 <div class="card-body">
                     <div id="button-console">
-                        <div class="btn-group float-right" role="group" aria-label="Basic example">
+                        <div class="btn-group float-right" role="group">
                             <button v-on:click="sortByHours" type="button" class="btn btn-secondary">Hour ASC</button>
                             <button v-on:click="sortByHoursDesc" type="button" class="btn btn-secondary">Hour DESC</button>
                             <button v-on:click="sortByEmployee" type="button" class="btn btn-secondary">Employee ASC</button>
@@ -34,14 +34,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" id="column">
-            <div class="card console">
-                <div class="card-body">
-                    <h5 v-show="report.name != null || report.name != ''" class="card-title">Report: {{ report.name }}</h5>
-                    <p class="card-text">Created on: {{ moment(report.created_at).format('MMMM Do YYYY') }}</p>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -50,7 +42,7 @@ export default {
     data() {
         return {
             report: this.one_report,
-            reportData: []
+            reportData: [],
         }
     },
     props: ['one_report'],
@@ -106,14 +98,17 @@ export default {
 </script>
 
 <style scoped>
-#column {
-    padding-top: 3%;
+.card.show-card {
+    height: 100vh;
+    overflow: hidden;
+    overflow: scroll;
 }
-.card.console {
-    height: 300px;
+#column {
+    padding-top: 2%;
 }
 .btn-group {
     margin-bottom: 10px;
+    width: 100%;
 }
 tr:hover {
     background-color: lightgray;

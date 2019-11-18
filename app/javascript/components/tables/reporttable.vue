@@ -24,7 +24,6 @@ export default {
     data() {
         return {
             csv: [],
-            isEditing: {index: -1, type: "none"}
         }
     },
     props: ['submittedCsv'],
