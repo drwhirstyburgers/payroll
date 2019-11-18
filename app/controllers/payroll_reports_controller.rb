@@ -54,8 +54,7 @@ class PayrollReportsController < ApplicationController
     else
       respond_to do |format|
         if @payroll_report.save!
-          format.html { redirect_to @payroll_report, notice: 'Payroll report was successfully created.' }
-          format.json { render :show, status: :created, location: @payroll_report }
+          format.html { redirect_to payroll_reports_path, notice: 'Payroll report was successfully created.' }
         else
           format.html { render :new }
           format.json { render json: @payroll_report.errors, status: :unprocessable_entity }
