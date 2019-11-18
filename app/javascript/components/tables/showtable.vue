@@ -1,8 +1,18 @@
 <template>
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9" id="column">
             <div class="card show-card">
                 <div class="card-body">
+                    <div id="button-console">
+                        <div class="btn-group float-right" role="group" aria-label="Basic example">
+                            <button v-on:click="sortByHours" type="button" class="btn btn-secondary">Hour ASC</button>
+                            <button v-on:click="sortByHoursDesc" type="button" class="btn btn-secondary">Hour DESC</button>
+                            <button v-on:click="sortByEmployee" type="button" class="btn btn-secondary">Employee ASC</button>
+                            <button v-on:click="sortByEmployeeDesc" type="button" class="btn btn-secondary">Employee DESC</button>
+                            <button v-on:click="sortByJg" type="button" class="btn btn-secondary">Job Group ASC</button>
+                            <button v-on:click="sortByJgDesc" type="button" class="btn btn-secondary">Job Group DESC</button>
+                        </div>
+                    </div>
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
@@ -24,7 +34,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3" id="column">
+            <div class="card console">
+                <div class="card-body">
+                    <h5 v-show="report.name != null || report.name != ''" class="card-title">Report: {{ report.name }}</h5>
+                    <p class="card-text">Created on: {{ moment(report.created_at).format('MMMM Do YYYY') }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -41,6 +57,7 @@ export default {
     watch: {
         one_report: function() {
             const id = this.one_report.id
+            this.report = this.one_report
             $.ajax({
                 type: "GET",
                 url: '/get_report_data',
@@ -49,9 +66,39 @@ export default {
                     console.log(err)
                 },
                 success: (data) => {
-                    this.reportData = data
+                    this.reportData = data.filter((d) => {
+                        if(d.date != "report id"){
+                            return d
+                        }
+                    })
                 }
 
+            })
+        }
+    },
+    methods: {
+        sortByHours(){
+            return this.reportData.sort((a, b) => Number(a.hours_worked) - Number(b.hours_worked))
+        },
+        sortByHoursDesc(){
+            return this.reportData.sort((a, b) => Number(b.hours_worked) - Number(a.hours_worked))
+        },
+        sortByEmployee(){
+            return this.reportData.sort((a, b) => Number(a.employee_id) - Number(b.employee_id))
+        },
+        sortByEmployeeDesc(){
+            return this.reportData.sort((a, b) => Number(b.employee_id) - Number(a.employee_id))
+        },
+        sortByJg() {
+            return this.reportData.sort(function(a, b){ 
+                if(a.job_group < b.job_group){ return -1 }
+                if(a.job_group > b.job_group){ return 1 } 
+            })
+        },
+        sortByJgDesc(){
+            return this.reportData.sort(function(a, b){ 
+                if(a.job_group > b.job_group){ return -1 }
+                if(a.job_group < b.job_group){ return 1 } 
             })
         }
     }
@@ -59,7 +106,17 @@ export default {
 </script>
 
 <style scoped>
-.card.show-card {
-    margin-top: 3%;
+#column {
+    padding-top: 3%;
+}
+.card.console {
+    height: 300px;
+}
+.btn-group {
+    margin-bottom: 10px;
+}
+tr:hover {
+    background-color: lightgray;
+    cursor: pointer;
 }
 </style>

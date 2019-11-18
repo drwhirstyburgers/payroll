@@ -23,7 +23,7 @@
                         Create a new...
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/">Report</a>
+                        <a class="dropdown-item" href="/payroll_reports/new">Report</a>
                         <a class="dropdown-item" href="/employees/new">Employee</a>
                         <a class="dropdown-item" href="/job_groups/new">Job Group</a>
                     </div>
