@@ -121,8 +121,10 @@ export default {
             }
         },
         submitNewOnes(){
+            this.newEmploy = JSON.stringify(this.newEmploy)
+            this.newJobGroups = JSON.stringify(this.newJobGroups)
             $.ajax({
-                type: "PUT",
+                type: "POST",
                 url: '/payroll_reports/return_new_items',
                 data: { employees: this.newEmploy, job_groups: this.newJobGroups, report_id: this.reportId },
                 error: (err) => {

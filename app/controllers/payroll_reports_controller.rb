@@ -1,7 +1,10 @@
 class PayrollReportsController < ApplicationController
   require 'report_organizer'
   include ReportOrganizer
+  require 'update_user_jg'
+  include UpdateUserJg
   require 'json'
+
   before_action :set_payroll_report, only: [:edit, :update, :destroy]
   skip_before_action :verify_authenticity_token 
 
@@ -31,12 +34,9 @@ class PayrollReportsController < ApplicationController
   def create
     name = params[:name]
     csv = params[:csv]
-    new_csv = []
-    csv = eval(csv).each do |c|
-      new_csv << c
-    end
+    csv = eval(csv)
 
-    report_id = get_report_id(new_csv)
+    report_id = get_report_id(csv)
     @payroll_report = PayrollReport.new(name: name, report_id: report_id)
 
     employee_ids = get_employee_ids(csv)
@@ -86,6 +86,19 @@ class PayrollReportsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def return_data
+    employees = eval(params[:employees])
+    report = PayrollReport.find(params[:report_id])
+    job_groups = eval(params[:job_groups])
+
+    update_employees(employees)
+    update_job_groups(job_groups)
+
+    redirect_to payroll_report_path(report)
+  end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
