@@ -1,6 +1,4 @@
 <template>
-    <div class="row">
-        <div class="col-md-9" id="column">
             <div class="card show-card">
                 <div class="card-body">
                     <div id="button-console">
@@ -35,8 +33,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
 </template>
 
 <script>
@@ -108,9 +104,19 @@ export default {
             })
         },
         displayOnConsole(cs){
-            const row = cs
-            this.$emit('changeRow', cs)
-        }
+            const consolePayload = []
+            $.ajax({
+                type: "GET",
+                url: '/sum_of_hours_worked',
+                data: { employee_id: cs.employee_id, report_id: this.report.id, job_group: cs.job_group },
+                success: (data) => {
+                    consolePayload.push(data)
+                }
+            })
+            consolePayload.push(cs)
+            console.log(consolePayload)
+            this.$emit('changeRow', consolePayload)
+        },
     }
 }
 </script>
@@ -120,9 +126,8 @@ export default {
     height: 95vh;
     overflow: hidden;
     overflow: scroll;
-}
-#column {
-    padding-top: 2%;
+    width: 100%;
+    margin-top: 2%;
 }
 .btn-group {
     margin-bottom: 10px;

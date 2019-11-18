@@ -4,11 +4,11 @@
             <div class="col-lg-2" id="sideNav">
                 <reportssidebar v-on:selected="passReport" :all_reports="reports" />
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-8">
                 <showtable v-on:changeRow="changeRowData" v-on:dataProvided="passToConsole" :one_report="selectedReport" />
             </div>
             <div class="col-lg-2">
-                <console :reportData="selectedReport" :row="selectedRow" :wage_data="wageData" />
+                <console :reportData="selectedReport" :selectRow="selectedRow" :wage_data="wageData" />
             </div>
         </div>
     </div>
@@ -35,11 +35,9 @@ export default {
             this.selectedReport = reportPicked
         },
         changeRowData(cs){
-            window.console.log(cs);
             this.selectedRow = cs
         },
         passToConsole(data){
-            window.console.log(data)
             this.wageData = data
         }
     }

@@ -109,6 +109,14 @@ class PayrollReportsController < ApplicationController
     render json: return_hash.to_json, status: :ok
   end
 
+  def sum_of_employee_hours
+    report = PayrollReport.includes(:rows).find(params[:report_id])
+    employee = Employee.find_by(employee_id: params[:employee_id])
+    job_group = JobGroup.find_by(name: params[:job_group])
+    return_hash = total_hours_worked_and_money_owed(report.rows, employee, job_group)
+    render json: return_hash.to_json, status: :ok
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_payroll_report
