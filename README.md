@@ -1,25 +1,19 @@
-# README
+#  WayvRoll README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To run:
 
-Things you may want to cover:
+* bundle install
 
-* Ruby version
+* yarn install
 
-* System dependencies
+* rails db:create
 
-* Configuration
+* rails db:migrate
 
-* Database creation
+* bin/webpack-dev-server
 
-* Database initialization
+* rails s
 
-* How to run the test suite
+* navigate to localhost:3000
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
-
-* ...
-# payroll
