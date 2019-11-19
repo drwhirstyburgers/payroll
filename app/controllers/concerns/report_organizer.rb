@@ -4,7 +4,8 @@ module ReportOrganizer
         new_report = []
         sorted_by_date = sort_data_by_date(csv)
         summed_and_consolidated = sum_and_consolidate(sorted_by_date)
-        csv.each do |i|
+        proper_format = get_amount_paid_and_create_hash(summed_and_consolidated)
+        proper_format.each do |i|
             create_row(i, payroll_report)
         end
     end
@@ -32,7 +33,7 @@ module ReportOrganizer
                 first_half = sorted_by_employee[e].select { |d| d[:date].day.between?(1, 15) && d[:date].month == m }
                 first_half.each do |r|
                     year = r[:date].year
-                    temp = {:range => "1/#{m}/#{year}-15/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked]}
+                    temp = {:range => "1/#{m}/#{year}-15/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked], :job_group => r[:job_group]}
                     return_arr << temp
                 end
                 second_half = sorted_by_employee[e].select { |d| d[:date].day.between?(16, last_day) && d[:date].month == m }
@@ -41,7 +42,7 @@ module ReportOrganizer
                     unless year % 4 == 0
                         last_day = last_day - 1
                     end
-                    temp = {:range => "16/#{m}/#{year}-#{last_day}/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked]}
+                    temp = {:range => "16/#{m}/#{year}-#{last_day}/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked], :job_group => r[:job_group]}
                     return_arr << temp
                 end
             end
@@ -52,27 +53,62 @@ module ReportOrganizer
     def sum_and_consolidate(data)
         return_arr = []
         employees = data.map { |r| r[:employee_id] }.uniq
-        ranges = data.map { |r| r[:range] }
+        ranges = data.map { |r| r[:range] }.uniq
         employees.each do |e|
             ranges.each do |r|
                 temp_h = {}
                 temp = data.select { |d| d[:employee_id] == e && d[:range] == r }
-                puts temp
-                sum_of_hours = temp.map { |r| r[:hours_worked].to_f }
-                sum_of_hours = sum_of_hours.sum
-                temp_h[:range] = r
-                temp_h[:employee_id] = e
-                temp_h[:hours_worked] = sum_of_hours
-                return_arr << temp_h if temp_h[:hours_worked] > 0
+                if temp.present?
+                    group = temp.map { |r| r[:job_group] }.uniq
+                    unless group.count > 1
+                        sum_of_hours = temp.map { |r| r[:hours_worked].to_f }
+                        sum_of_hours = sum_of_hours.sum
+                        temp_h[:range] = r
+                        temp_h[:employee_id] = e
+                        temp_h[:hours_worked] = sum_of_hours
+                        temp_h[:job_group] = group.first
+                        return_arr << temp_h if temp_h[:hours_worked] > 0
+                    else
+                        group.each do |g|
+                            new_temps = data.select { |d| d[:employee_id] == e && d[:range] == r && d[:job_group] == g }
+                            new_temps.each do |nt|
+                                sum_of_hours = temp.map { |r| r[:hours_worked].to_f }
+                                sum_of_hours = sum_of_hours.sum
+                                temp_h[:range] = r
+                                temp_h[:employee_id] = e
+                                temp_h[:hours_worked] = sum_of_hours
+                                temp_h[:job_group] = g
+                                return_arr << temp_h if temp_h[:hours_worked] > 0
+                            end
+                        end
+                    end
+                end
             end
         end
         return return_arr.uniq
     end
+
+    def get_amount_paid_and_create_hash(summed_and_consolidated)
+        return_arr = []
+        jg = summed_and_consolidated.map { |r| r[:job_group] }.uniq
+        job_groups = JobGroup.where(name: jg) #refactored so that not making N+1 Query
+        summed_and_consolidated.each do |r|
+            job_group = job_groups.select { |j| r[:job_group] == j.name }.first
+            temp = {}
+            temp[:range] = r[:range]
+            temp[:employee_id] = r[:employee_id]
+            temp[:amount_paid] = r[:hours_worked] * job_group.wage
+            return_arr << temp
+        end
+        return return_arr.uniq
+    end
+
+
     
     def create_row(csv_row, payroll_report)
         #date = convert_date(csv_row[:date])
         #convert_date(date)
-        row = payroll_report.rows.build(date: csv_row[:date], hours_worked: csv_row[:hours_worked], employee_id: csv_row[:employee_id], job_group: csv_row[:job_group])
+        row = payroll_report.rows.build(pay_period: csv_row[:range], employee_id: csv_row[:employee_id], amount_paid: csv_row[:amount_paid])
         row.save!
     end
     

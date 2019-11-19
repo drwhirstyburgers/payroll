@@ -46,16 +46,15 @@ class PayrollReportsController < ApplicationController
     else
       @payroll_report = PayrollReport.new(name: name, report_id: report_id)
 
-      employee_ids = get_employee_ids(csv)
-      new_employees = generate_new_employees(employee_ids)
+      generate_new_employees(employee_ids)
 
       organize_report(csv, @payroll_report)
 
       job_groups = get_job_groups(@payroll_report)
       new_job_groups = generate_new_job_groups(job_groups)
 
-      if new_employees.present? || new_job_groups.present?
-        json_payload = {:new_employees => new_employees, :new_job_groups => new_job_groups, :report_id => @payroll_report.id }
+      if new_job_groups.present?
+        json_payload = {:new_job_groups => new_job_groups, :report_id => @payroll_report.id }
         render json: json_payload.to_json, status: :ok
       else
         if @payroll_report.save!
@@ -92,11 +91,9 @@ class PayrollReportsController < ApplicationController
   end
 
   def return_data
-    employees = eval(params[:employees])
     report = PayrollReport.find(params[:report_id])
     job_groups = eval(params[:job_groups])
 
-    update_employees(employees)
     update_job_groups(job_groups)
 
     redirect_to payroll_reports_path

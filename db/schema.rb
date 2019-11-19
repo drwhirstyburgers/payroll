@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2019_11_17_213628) do
   enable_extension "plpgsql"
 
   create_table "employees", force: :cascade do |t|
-    t.string "name"
     t.integer "employee_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
