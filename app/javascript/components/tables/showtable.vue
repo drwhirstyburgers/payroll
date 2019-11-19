@@ -3,14 +3,12 @@
                 <div class="card-body">
                     <div id="button-console">
                         <div class="btn-group float-right" role="group">
-                            <button v-on:click="sortByDate" type="button" class="btn btn-secondary">Date ASC</button>
-                            <button v-on:click="sortByDateDesc" type="button" class="btn btn-secondary">Date DESC</button>
-                            <button v-on:click="sortByHours" type="button" class="btn btn-secondary">Hour ASC</button>
-                            <button v-on:click="sortByHoursDesc" type="button" class="btn btn-secondary">Hour DESC</button>
                             <button v-on:click="sortByEmployee" type="button" class="btn btn-secondary">Employee ASC</button>
                             <button v-on:click="sortByEmployeeDesc" type="button" class="btn btn-secondary">Employee DESC</button>
-                            <button v-on:click="sortByJg" type="button" class="btn btn-secondary">Job Group ASC</button>
-                            <button v-on:click="sortByJgDesc" type="button" class="btn btn-secondary">Job Group DESC</button>
+                            <button v-on:click="sortByDate" type="button" class="btn btn-secondary">Pay Period ASC</button>
+                            <button v-on:click="sortByDateDesc" type="button" class="btn btn-secondary">Pay Period DESC</button>
+                            <button v-on:click="sortByAp" type="button" class="btn btn-secondary">Amount Paid ASC</button>
+                            <button v-on:click="sortByApDesc" type="button" class="btn btn-secondary">Amount Paid DESC</button>
                         </div>
                     </div>
                     <table class="table">
@@ -67,11 +65,11 @@ export default {
         }
     },
     methods: {
-        sortByHours(){
-            return this.reportData.sort((a, b) => Number(a.hours_worked) - Number(b.hours_worked))
+        sortByAp(){
+            return this.reportData.sort((a, b) => Number(a.amount_paid) - Number(b.amount_paid))
         },
-        sortByHoursDesc(){
-            return this.reportData.sort((a, b) => Number(b.hours_worked) - Number(a.hours_worked))
+        sortByApDesc(){
+            return this.reportData.sort((a, b) => Number(b.amount_paid) - Number(a.amount_paid))
         },
         sortByEmployee(){
             return this.reportData.sort((a, b) => Number(a.employee_id) - Number(b.employee_id))
@@ -79,26 +77,14 @@ export default {
         sortByEmployeeDesc(){
             return this.reportData.sort((a, b) => Number(b.employee_id) - Number(a.employee_id))
         },
-        sortByJg() {
-            return this.reportData.sort(function(a, b){ 
-                if(a.job_group < b.job_group){ return -1 }
-                if(a.job_group > b.job_group){ return 1 } 
-            })
-        },
-        sortByJgDesc(){
-            return this.reportData.sort(function(a, b){ 
-                if(a.job_group > b.job_group){ return -1 }
-                if(a.job_group < b.job_group){ return 1 } 
-            })
-        },
         sortByDate(){
             return this.reportData.sort(function(a, b) { 
-                return new Date(a.date.split('/').reverse().join()) - new Date(b.date.split('/').reverse().join())
+                return new Date(a.pay_period.split('-')[0].split('/').reverse().join()) - new Date(b.pay_period.split('-')[0].split('/').reverse().join())
             })
         },
         sortByDateDesc(){
             return this.reportData.sort(function(a, b) { 
-                return new Date(b.date.split('/').reverse().join()) - new Date(a.date.split('/').reverse().join()) 
+                return new Date(b.pay_period.split('-')[0].split('/').reverse().join()) - new Date(a.pay_period.split('-')[0].split('/').reverse().join()) 
             })
         },
         displayOnConsole(cs){
