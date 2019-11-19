@@ -1,6 +1,9 @@
 module ReportOrganizer
+    DATE_MONTH_NAMES = I18n.t("date.month_names")
     def organize_report(csv, payroll_report)
         new_report = []
+        sorted_by_date = sort_data_by_date(csv)
+        summed_and_consolidated = sum_and_consolidate(sorted_by_date)
         csv.each do |i|
             create_row(i, payroll_report)
         end
@@ -9,6 +12,61 @@ module ReportOrganizer
     def get_report_id(csv)
        the_one = csv.select { |r| r[:date] == "report id" }.first
        return the_one[:hours_worked]
+    end
+
+    def sort_data_by_date(csv)
+        return_arr = []
+        csv.delete_if { |r| r[:employee_id] == '' || r[:employee_id] == nil }
+        employees = csv.map { |r| r[:employee_id].to_s }.uniq
+        sorted_by_employee = csv.group_by { |r| r[:employee_id] }
+        employees.each do |e|
+            sorted_by_employee[e].each { |r| r[:date] = Date.parse(r[:date]) }
+            dates = sorted_by_employee[e].map { |r| r[:date] }.sort
+            months = dates.map { |d| d.month }.uniq
+            months.each do |m|
+                last_day = Time.days_in_month(m)
+                if m == 2
+                    last_day += 1
+                end
+                last_half = last_day - 15
+                first_half = sorted_by_employee[e].select { |d| d[:date].day.between?(1, 15) && d[:date].month == m }
+                first_half.each do |r|
+                    year = r[:date].year
+                    temp = {:range => "1/#{m}/#{year}-15/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked]}
+                    return_arr << temp
+                end
+                second_half = sorted_by_employee[e].select { |d| d[:date].day.between?(16, last_day) && d[:date].month == m }
+                second_half.each do |r|
+                    year = r[:date].year
+                    unless year % 4 == 0
+                        last_day = last_day - 1
+                    end
+                    temp = {:range => "16/#{m}/#{year}-#{last_day}/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked]}
+                    return_arr << temp
+                end
+            end
+        end
+        return return_arr
+    end
+            
+    def sum_and_consolidate(data)
+        return_arr = []
+        employees = data.map { |r| r[:employee_id] }.uniq
+        ranges = data.map { |r| r[:range] }
+        employees.each do |e|
+            ranges.each do |r|
+                temp_h = {}
+                temp = data.select { |d| d[:employee_id] == e && d[:range] == r }
+                puts temp
+                sum_of_hours = temp.map { |r| r[:hours_worked].to_f }
+                sum_of_hours = sum_of_hours.sum
+                temp_h[:range] = r
+                temp_h[:employee_id] = e
+                temp_h[:hours_worked] = sum_of_hours
+                return_arr << temp_h if temp_h[:hours_worked] > 0
+            end
+        end
+        return return_arr.uniq
     end
     
     def create_row(csv_row, payroll_report)

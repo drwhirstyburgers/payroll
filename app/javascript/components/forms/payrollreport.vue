@@ -88,6 +88,7 @@ export default {
                     header: true,
                     complete (results) {
                         that.csv = JSON.stringify(results.data).replace(/( +)(?=[(\w* *]*":)/g, "_");
+                        console.log(that.csv)
                         that.csv = JSON.parse(that.csv)
                     },
                     error (errors) {
