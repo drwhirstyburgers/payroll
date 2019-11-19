@@ -23,7 +23,7 @@ module PayrollMath
         sum_of_all = 0
         groups_and_wages.each do |gw|
             all_in_this_group = report_data.select { |rd| rd.job_group == gw[:name] }
-            return_hash[gw[:name]] = all_in_this_group.map { |i| i.hours_worked * gw[:wage] if i.hours_worked.present? }.sum
+            return_hash[gw[:name]] = all_in_this_group.map { |i| i.amount_paid * all_in_this_group.count if all_in_this_group.present? }.sum
             sum_of_all += return_hash[gw[:name]]
         end
         return_hash[:total] = sum_of_all

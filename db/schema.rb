@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_11_17_213628) do
     t.string "pay_period"
     t.float "amount_paid"
     t.integer "employee_id"
+    t.string "job_group"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["payroll_report_id"], name: "index_rows_on_payroll_report_id"

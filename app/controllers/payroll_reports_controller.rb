@@ -40,17 +40,18 @@ class PayrollReportsController < ApplicationController
     csv = eval(csv)
 
     report_id = get_report_id(csv)
-    report_uniq_check = PayrollReport.find_by(report_id: report_id)
-    if report_uniq_check.present?
-      render json: "exists".to_json, status: :unprocessable_entity
-    else
+    # report_uniq_check = PayrollReport.find_by(report_id: report_id)
+    #if report_uniq_check.present?
+    #  render json: "exists".to_json, status: :unprocessable_entity
+    #else
       @payroll_report = PayrollReport.new(name: name, report_id: report_id)
-
+      
+      employee_ids = get_employee_ids(csv)
       generate_new_employees(employee_ids)
 
       organize_report(csv, @payroll_report)
 
-      job_groups = get_job_groups(@payroll_report)
+      job_groups = get_job_groups(csv)
       new_job_groups = generate_new_job_groups(job_groups)
 
       if new_job_groups.present?
@@ -63,7 +64,7 @@ class PayrollReportsController < ApplicationController
           render :new
         end
       end
-    end
+    #end
   end
 
   # PATCH/PUT /payroll_reports/1
@@ -126,8 +127,8 @@ class PayrollReportsController < ApplicationController
       return csv.map { |i| i[:employee_id] if i[:employee_id].present? }.uniq.delete_if { |x| x == nil}
     end 
 
-    def get_job_groups(payroll_report)
-      return payroll_report.rows.map(&:job_group).delete_if { |j| j == nil || j == ''}
+    def get_job_groups(csv)
+      return csv.map { |r| r[:job_group] }.delete_if { |j| j == nil || j == ''}
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

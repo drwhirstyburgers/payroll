@@ -16,18 +16,16 @@
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Hours Worked</th>
                                 <th scope="col">Employee ID</th>
-                                <th scope="col">Job Group</th>
+                                <th scope="col">Pay Period</th>
+                                <th scope="col">Amount Paid</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-on:click="displayOnConsole(cs)" v-for="cs in reportData" v-bind:cs="cs" v-bind:key="cs.key">
-                                <td>{{ cs.date }}</td>
-                                <td>{{ cs.hours_worked }}</td>
                                 <td>{{ cs.employee_id }}</td>
-                                <td>{{ cs.job_group }}</td>
+                                <td>{{ cs.pay_period }}</td>
+                                <td>{{ cs.amount_paid }}</td>
                             </tr>
                         </tbody>
                     </table>

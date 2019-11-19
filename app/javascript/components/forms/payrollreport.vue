@@ -88,7 +88,6 @@ export default {
                     header: true,
                     complete (results) {
                         that.csv = JSON.stringify(results.data).replace(/( +)(?=[(\w* *]*":)/g, "_");
-                        console.log(that.csv)
                         that.csv = JSON.parse(that.csv)
                     },
                     error (errors) {
@@ -107,7 +106,6 @@ export default {
                     url: '/payroll_reports',
                     data: { name: this.name, csv: this.csv },
                     success: (data) => {
-                        console.log(data.new_employees)
                         this.newEmploy = data.new_employees
                         this.newJobGroups = data.new_job_groups
                         this.stepTwo = true
@@ -117,8 +115,10 @@ export default {
                         var error = err.responseText
                         if(err.responseText == error){
                             alert("Error, this report id already exists.")
+                            location.reload();
                         } else {
                             alert("there was an error please try again")
+                            location.reload();
                         }
                     }
                 })

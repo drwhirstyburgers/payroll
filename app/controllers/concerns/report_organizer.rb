@@ -98,6 +98,7 @@ module ReportOrganizer
             temp[:range] = r[:range]
             temp[:employee_id] = r[:employee_id]
             temp[:amount_paid] = r[:hours_worked] * job_group.wage
+            temp[:job_group] = job_group.name
             return_arr << temp
         end
         return return_arr.uniq
@@ -108,7 +109,7 @@ module ReportOrganizer
     def create_row(csv_row, payroll_report)
         #date = convert_date(csv_row[:date])
         #convert_date(date)
-        row = payroll_report.rows.build(pay_period: csv_row[:range], employee_id: csv_row[:employee_id], amount_paid: csv_row[:amount_paid])
+        row = payroll_report.rows.build(pay_period: csv_row[:range], employee_id: csv_row[:employee_id], amount_paid: csv_row[:amount_paid], job_group: csv_row[:job_group])
         row.save!
     end
     
