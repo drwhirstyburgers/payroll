@@ -23,7 +23,7 @@
                             <tr v-on:click="displayOnConsole(cs)" v-for="cs in reportData" v-bind:cs="cs" v-bind:key="cs.key">
                                 <td>{{ cs.employee_id }}</td>
                                 <td>{{ cs.pay_period }}</td>
-                                <td>${{ cs.amount_paid }}</td>
+                                <td>${{ cs.amount_paid.toFixed(2) }}</td>
                             </tr>
                         </tbody>
                     </table>
