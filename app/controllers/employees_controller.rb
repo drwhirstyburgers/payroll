@@ -1,4 +1,6 @@
 class EmployeesController < ApplicationController
+  require 'employee_logic'
+  include EmployeeLogic
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
   # I know this is bad practice, but sometimes when I generate new models, the controllers don't work properly and as I am on time constraints I didn't want to remake the models/migrations
   skip_before_action :verify_authenticity_token 
@@ -12,6 +14,8 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
+    @employee_information = get_employee_info(@employee.employee_id)
+    @rows = Row.where(employee_id: @employee.employee_id).order(:amount_paid)
   end
 
   # GET /employees/new
