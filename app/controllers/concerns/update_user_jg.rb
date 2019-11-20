@@ -21,6 +21,14 @@ module UpdateUserJg
         return return_arr
     end
 
+    def check_values_of_job_groups(job_groups)
+        job_groups.each do |jg|
+            if jg[:wage] == nil || jg[:wage] == ''
+                return false
+            end
+        end
+    end
+
     def update_existing_job_groups(job_groups)
         job_groups.each do |jg|
             job_group = JobGroup.find(jg[:id])

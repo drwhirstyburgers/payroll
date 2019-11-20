@@ -6,12 +6,13 @@
 
                     <div class="modal-header">
                         <slot name="header">
-                            <h4>Looks like there are some new job groups!</h4>
+                            <h4>Looks like there are some new job groups!</h4><br />
                         </slot>
                     </div>
 
                     <div class="modal-body">
                         <slot name="body">
+                          <h6 v-if="blankError">There can be no blanks, please try again!</h6>
                             <div v-for="group in jobGroups" v-bind:group="group" v-bind:key="group.key" class="card">
                                 <div class="card-body">
                                     <label>Name: {{ group.name }}</label>
@@ -36,14 +37,27 @@
 export default {
     data() {
         return {
-            jobGroups: this.job_groups
+            jobGroups: this.job_groups,
+            blankError: false
         }
     },
-    props: ['job_groups'],
+    props: ['job_groups', 'blank_error'],
+    watch: {
+      blank_error: function(){
+        this.blankError = true
+      }
+    },
     methods: {
         submitNewGroups(){
+            let check = this.checkForNull(this.jobGroups)
+            if(check.length > 0){
+              this.blankError = true
+            }
             const updatedJobGroups = this.jobGroups
             this.$emit('updated', updatedJobGroups)
+        },
+        checkForNull(job_groups){
+          return job_groups.filter(jg => jg.wage == null || jg.wage == undefined || jg.wage == '' )
         }
     }
 }

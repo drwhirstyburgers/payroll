@@ -96,9 +96,12 @@ class PayrollReportsController < ApplicationController
 
   def update_job_groups
     job_groups = eval(params[:job_groups])
-    puts job_groups
-    update_existing_job_groups(job_groups)
-    render json: "done".to_json, status: :ok
+    if check_values_of_job_groups(job_groups)
+      update_existing_job_groups(job_groups)
+      render json: "done".to_json, status: :ok
+    else
+      render json: "blanks".to_json, status: :unprocessable_entity
+    end
   end
 
   def get_data

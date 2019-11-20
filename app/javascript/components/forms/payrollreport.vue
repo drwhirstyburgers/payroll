@@ -1,6 +1,6 @@
 <template>
 <div>
-    <newjobgroupmodal v-on:updated="submitUpdatedJobGroups" v-if="stepTwo" :job_groups="newJobGroups" />
+    <newjobgroupmodal v-on:updated="submitUpdatedJobGroups" v-if="stepTwo" :job_groups="newJobGroups" :blank_error="blankError" />
     <form>
         <div class="row">
             <div class='col-md-6'>
@@ -50,6 +50,7 @@ export default {
             stepTwo: false,
             reportId: null,
             jobGroupNames: [],
+            blankError: false
         }
     },
     components: { reporttable, newjobgroupmodal },
@@ -111,10 +112,13 @@ export default {
                     url: '/update_job_groups',
                     data: { job_groups: this.newJobGroups },
                     error: (err) => {
+                        var error = err.responseText
+                        if(error == "blanks"){
+                            this.blankError = true
+                        }
                         console.log(err)
                     },
                     success: (data) => {
-                        console.log(data)
                         this.submitReport()
                     }
                 })
