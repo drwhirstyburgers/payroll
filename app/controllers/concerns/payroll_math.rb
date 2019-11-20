@@ -32,8 +32,9 @@ module PayrollMath
 
     def total_hours_worked_and_money_owed(rows, employee, wage_group)
         return_hash = {}
-        return_hash[:total_hours] = rows.select { |r| r.employee_id == employee.employee_id }.map { |m| m.hours_worked }.sum
+        return_hash[:total_hours] = rows.select { |r| r.employee_id == employee.employee_id }.map(&:total_hours_worked).sum
         return_hash[:sum_owed] = return_hash[:total_hours] * wage_group.wage
+        return_hash[:wage] = wage_group.wage
         return return_hash
     end
 end

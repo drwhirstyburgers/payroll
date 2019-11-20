@@ -1,22 +1,26 @@
 <template>
-<div id="console-cards">
+<div v-show="report.name != null" id="console-cards">
     <div class="card console">
         <div class="card-body">
             <h5>Report: {{ report.name }}</h5>
             <h6 class="card-text">Created on: {{ moment(report.created_at).format('MMMM Do YYYY') }}</h6>
             <h6 v-for="(value, key) in wageData.sums" v-bind:value="value" v-bind:key="value.key" class="card-text">{{ key }}: ${{ value }}</h6>
-            <hr>
-            <h5>Employee ID: {{ selectedRow.employee_id }}</h5>
-            <h6>Hours worked: {{ selectedRow.hours_worked }} </h6>
-            <h6>Wage Group: {{ selectedRow.job_group }}</h6>
-            <h6>Amount owed for shift: ${{ totalPaid }}</h6>
         </div>
     </div>
-    <div class="card console">
+    <div v-if="selected" class="card console">
         <div class="card-body">
-            <h5>Report totals for employee</h5>
+            <h5>Employee ID: {{ selectedRow.employee_id }}</h5>
             <h6>Total hours: {{ totals.total_hours }}</h6>
-            <h6>Total amount owed on report: ${{totals.sum_owed}}</h6>
+            <h6>Total amount paid: ${{totals.sum_owed}}</h6>
+            <h6>Hours worked: {{ selectedRow.total_hours_worked }} </h6>
+            <h6>Wage Group: {{ selectedRow.job_group }}</h6>
+            <h6>Wage: ${{ wage }}</h6>
+            <h6>Amount paid: ${{ totalPaid }}</h6>
+        </div>
+    </div>
+    <div v-if="!selected">
+        <div class="card-body">
+            <h5>Click on a row to get more information</h5>
         </div>
     </div>
 </div>
@@ -30,7 +34,9 @@ export default {
             selectedRow: {},
             wageData: this.wage_data,
             totalPaid: 0,
-            totals: {}
+            totals: {},
+            wage: 0,
+            selected: false
         }
     },
     watch: {
@@ -38,9 +44,11 @@ export default {
             this.report = this.reportData
         },
         selectRow: function(){
+            this.selected = true
             this.selectedRow  = this.selectRow[0]
             this.totals = this.selectRow[1]
             this.totalPaid = this.sumOfHours()
+            this.wage = this.totals.wage
         },
         wage_data: function(){
             this.wageData  = this.wage_data
@@ -50,7 +58,7 @@ export default {
     methods:{
         sumOfHours(){
             const group = this.getJobGroupWage(this.selectedRow.job_group)
-            return this.selectedRow.hours_worked * group.wage
+            return this.selectedRow.total_hours_worked * group.wage
         },
         getJobGroupWage(name){
             return this.wageData.groups_and_wages.find(w => w.name == name)
