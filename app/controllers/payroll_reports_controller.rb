@@ -40,10 +40,12 @@ class PayrollReportsController < ApplicationController
     csv = eval(csv)
 
     report_id = get_report_id(csv)
-    #report_uniq_check = PayrollReport.find_by(report_id: report_id)
-    #if report_uniq_check.present?
-    #  render json: "exists".to_json, status: :unprocessable_entity
-    #else
+    employee_ids = get_employee_ids(csv)
+    generate_new_employees(employee_ids)
+    report_uniq_check = PayrollReport.find_by(report_id: report_id)
+    if report_uniq_check.present?
+      render json: "exists".to_json, status: :unprocessable_entity
+    else
       @payroll_report = PayrollReport.new(name: name, report_id: report_id)
       
       organize_report(csv, @payroll_report)
@@ -53,7 +55,7 @@ class PayrollReportsController < ApplicationController
       else
         render :new
       end
-    #end
+    end
   end
 
   # PATCH/PUT /payroll_reports/1

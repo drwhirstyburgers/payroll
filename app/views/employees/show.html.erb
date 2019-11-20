@@ -18,6 +18,7 @@
             <tr>
               <th scope="col">Employee ID</th>
               <th scope="col">Pay Period</th>
+              <th scope="col">Hours Worked</th>
               <th scope="col">Amount Paid</th>
             </tr>
           </thead>
@@ -26,7 +27,8 @@
               <tr>
                 <td><%= r.employee_id %></td>
                 <td><%= r.pay_period %></td>
-                <td><%= r.amount_paid %></td>
+                <td><%= r.total_hours_worked %></td>
+                <td>$<%= r.amount_paid %></td>
               </tr>
             <% end %>
           </tbody>

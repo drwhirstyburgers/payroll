@@ -16,5 +16,5 @@ module EmployeeLogic
 
     def get_total_paid(rows)
         return rows.map(&:amount_paid).sum
-    end 
+    end
 end
