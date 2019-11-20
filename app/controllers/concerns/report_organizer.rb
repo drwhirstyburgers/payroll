@@ -37,9 +37,10 @@ module ReportOrganizer
                 end
                 second_half = sorted_by_employee[e].select { |d| d[:date].day.between?(16, last_day) && d[:date].month == m }
                 second_half.each do |r|
+                    last_day = Time.days_in_month(m)
                     year = r[:date].year
-                    unless year % 4 == 0
-                        last_day = last_day - 1
+                    if m == 2 && year % 4 == 0
+                        last_day = 29
                     end
                     temp = {:range => "16/#{m}/#{year}-#{last_day}/#{m}/#{year}", :employee_id => r[:employee_id], :hours_worked => r[:hours_worked], :job_group => r[:job_group]}
                     return_arr << temp
