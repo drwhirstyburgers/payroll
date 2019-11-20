@@ -15,7 +15,7 @@
             <h6>Total hours: {{ totals.total_hours }}</h6>
             <h6>Total amount paid: ${{ totals.sum_owed.toFixed(2) }}</h6>
             <hr>
-            <h5>Per selected period</h5>
+            <h5>Period: {{ selectedRow.pay_period }}</h5>
             <h6>Hours worked: {{ selectedRow.total_hours_worked }} </h6>
             <h6>Amount paid: ${{ totalPaid.toFixed(2) }}</h6>
         </div>
