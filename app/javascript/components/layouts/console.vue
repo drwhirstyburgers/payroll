@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
     data(){
         return {
@@ -64,7 +66,7 @@ export default {
         },
         getJobGroupWage(name){
             return this.wageData.groups_and_wages.find(w => w.name == name)
-        }
+        },
     }
 }
 </script>
