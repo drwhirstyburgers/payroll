@@ -23,7 +23,7 @@
                             <tr v-on:click="displayOnConsole(cs)" v-for="cs in reportData" v-bind:cs="cs" v-bind:key="cs.key">
                                 <td>{{ cs.employee_id }}</td>
                                 <td>{{ cs.pay_period }}</td>
-                                <td>{{ cs.amount_paid }}</td>
+                                <td>${{ cs.amount_paid }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -79,12 +79,12 @@ export default {
         },
         sortByDate(){
             return this.reportData.sort(function(a, b) { 
-                return new Date(a.pay_period.split('-')[0].split('/').reverse().join()) - new Date(b.pay_period.split('-')[0].split('/').reverse().join())
+                return new Date(a.pay_period.split('-')[1].split('/').reverse().join()) - new Date(b.pay_period.split('-')[1].split('/').reverse().join())
             })
         },
         sortByDateDesc(){
             return this.reportData.sort(function(a, b) { 
-                return new Date(b.pay_period.split('-')[0].split('/').reverse().join()) - new Date(a.pay_period.split('-')[0].split('/').reverse().join()) 
+                return new Date(b.pay_period.split('-')[1].split('/').reverse().join()) - new Date(a.pay_period.split('-')[1].split('/').reverse().join()) 
             })
         },
         displayOnConsole(cs){

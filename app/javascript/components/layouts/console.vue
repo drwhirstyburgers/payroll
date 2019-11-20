@@ -9,12 +9,14 @@
     </div>
     <div v-if="selected" class="card console">
         <div class="card-body">
-            <h5>Employee ID: {{ selectedRow.employee_id }}</h5>
-            <h6>Total hours: {{ totals.total_hours }}</h6>
-            <h6>Total amount paid: ${{totals.sum_owed}}</h6>
-            <h6>Hours worked: {{ selectedRow.total_hours_worked }} </h6>
+            <h5>Employee ID: {{ selectedRow.employee_id }} | Totals</h5>
             <h6>Wage Group: {{ selectedRow.job_group }}</h6>
             <h6>Wage: ${{ wage }}</h6>
+            <h6>Total hours: {{ totals.total_hours }}</h6>
+            <h6>Total amount paid: ${{totals.sum_owed}}</h6>
+            <hr>
+            <h5>Per selected period</h5>
+            <h6>Hours worked: {{ selectedRow.total_hours_worked }} </h6>
             <h6>Amount paid: ${{ totalPaid }}</h6>
         </div>
     </div>
