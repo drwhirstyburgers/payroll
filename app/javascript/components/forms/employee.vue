@@ -4,11 +4,7 @@
         <h1 v-if="editing" class="display-4">Edit Employee</h1>
         <h1 v-if="isError" v-on:click="isError = false" class="display-4">You must provide an employee ID and name and the ID must be unique</h1>
         <div class="form-group">
-            <label>Name</label>
-            <input v-model="name" type="text" class="form-control" placeholder="Enter name">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Employee ID</label>
+            <label>Employee ID</label>
             <input v-model="employeeId" type="number" class="form-control" placeholder="ID">
         </div>
         <button v-on:click="sendForm" type="submit" class="btn btn-primary float-right">Submit</button>
@@ -19,7 +15,6 @@
 export default {
     data() {
         return {
-            name: '',
             employeeId: null,
             editing: false,
             employee: {},
@@ -39,7 +34,7 @@ export default {
                     $.ajax({
                         type: 'PUT',
                         url: '/employees/' + this.employee.id,
-                        data: { employee: { name: this.name, employee_id: this.employeeId } },
+                        data: { employee: { employee_id: this.employeeId } },
                         error: (err) => {
                             console.log(err)
                             this.isError = true
@@ -49,7 +44,7 @@ export default {
                     $.ajax({
                         type: 'POST',
                         url: '/employees',
-                        data: { employee: { name: this.name, employee_id: this.employeeId } },
+                        data: { employee: { employee_id: this.employeeId } },
                         error: (err) => {
                             console.log(err)
                             this.isError = true

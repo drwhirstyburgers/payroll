@@ -1,12 +1,13 @@
 <template>
 <div>
-    <form v-if=!stepTwo>
+    <newjobgroupmodal v-on:updated="submitUpdatedJobGroups" v-if="stepTwo" :job_groups="newJobGroups" />
+    <form>
         <div class="row">
             <div class='col-md-6'>
                 <h1 class="display-4">New Report</h1>
             </div>
             <div class='col-md-6'>
-                <button v-on:click="submitReport" type="button" class="btn btn-primary float-right">Submit</button>
+                <button v-on:click="checkJobGroups" type="button" class="btn btn-primary float-right">Submit</button>
             </div>
         </div>
         <div v-if="isError" class="row">
@@ -27,39 +28,14 @@
             @change="submitFile" multiple>
         </div>
     </form>
-    <reporttable v-if="submitted && !stepTwo" :submitted_csv="csv" :submitted="submitted"/>
-    <div v-if="stepTwo">
-        <div v-if="newEmploy != null">
-            <h1 class="display-4">New Employees</h1>
-            <div v-for="employ in newEmploy" v-bind:employ="employ" v-bind:key="employ.key" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Employee ID: {{ employ.employee_id }}</h5>
-                    <div class="form-group">
-                        <label>Employee Name</label>
-                        <input v-model="employ.name" type="text" class="form-control" placeholder="Enter the employee name">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-if="newJobGroups != null">
-            <h1 class="display-4">New Job Groups</h1>
-            <div v-for="jobGroup in newJobGroups" v-bind:jobGroup="jobGroup" v-bind:key="jobGroup.key" class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Job Group: {{ jobGroup.name }}</h5>
-                    <div class="form-group">
-                        <label>Wage</label>
-                        <input v-model="jobGroup.wage" type="number" class="form-control" placeholder="Enter the wage amount">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button v-on:click="submitNewOnes" type="button" class="btn btn-primary float-right">Submit</button>
+    <reporttable v-if="submitted" :submitted_csv="csv" :submitted="submitted"/>
     </div>
 </div>
 </template>
 
 <script>
 import reporttable from '../tables/reporttable'
+import newjobgroupmodal from '../modals/newjobgroupmodal'
 import { all } from 'q'
 
 export default {
@@ -70,14 +46,13 @@ export default {
             submitted: false,
             isError: false,
             errorMessage: '',
-            newEmploy: [],
-            newJobGroups: [],
+            newJobGroups: null,
             stepTwo: false,
             reportId: null,
-            componentKey:0
+            jobGroupNames: [],
         }
     },
-    components: { reporttable },
+    components: { reporttable, newjobgroupmodal },
     methods: {
         submitFile(e) {
             const that = this
@@ -98,8 +73,55 @@ export default {
             reader.readAsText(fileToLoad)
             that.submitted = true
         },
-        submitReport(){
+        checkJobGroups(){
             if(this.name != '' && this.csv != []){
+                const csv = this.csv
+                this.jobGroupNames = this.returnUniqueJobGroupNames(csv)
+                if(this.jobGroupNamess != null || this.jobGroupNames != undefined || this.jobGroupNames != []){
+                    console.log(this.jobGroupNames)
+                    $.ajax({
+                        type: "POST",
+                        url: '/check_job_groups',
+                        data: { job_groups: this.jobGroupNames },
+                        error: (err) => {
+                            console.log(err)
+                            alert("there was an error please try again")
+                            location.reload();
+                        },
+                        success: (data) => {
+                            if(data == "exists"){
+                                this.submitReport()
+                            } else {
+                                this.newJobGroups = data
+                                this.stepTwo = true
+                            }
+                        }
+                    })
+                }
+            } else {
+                this.isError = true
+                this.errorMessage = "You must have both a report imported and a name for your report"
+            }
+        },
+        submitUpdatedJobGroups(updatedJobGroups) {
+            this.newJobGroups = JSON.stringify(updatedJobGroups)
+            if(this.newJobGroups != null || this.newJobGroups != undefined || this.newJobGroups != []){
+                $.ajax({
+                    type: "POST",
+                    url: '/update_job_groups',
+                    data: { job_groups: this.newJobGroups },
+                    error: (err) => {
+                        console.log(err)
+                    },
+                    success: (data) => {
+                        console.log(data)
+                        this.submitReport()
+                    }
+                })
+            }
+
+        },
+        submitReport(){
                 this.csv = JSON.stringify(this.csv)
                 $.ajax({
                     type: "POST",
@@ -122,22 +144,6 @@ export default {
                         }
                     }
                 })
-            } else {
-                this.isError = true
-                this.errorMessage = "You must have both a report imported and a name for your report"
-            }
-        },
-        submitNewOnes(){
-            this.newEmploy = JSON.stringify(this.newEmploy)
-            this.newJobGroups = JSON.stringify(this.newJobGroups)
-            $.ajax({
-                type: "POST",
-                url: '/payroll_reports/return_new_items',
-                data: { employees: this.newEmploy, job_groups: this.newJobGroups, report_id: this.reportId },
-                error: (err) => {
-                    console.log(err)
-                }
-            })
         },
         isEmpty(obj) {
             for(var key in obj) {
@@ -146,20 +152,17 @@ export default {
             }
             return true;
         },
-        allEmpty(arr){
-            const count = arr.length
-            const trueCount = 0
-            arr.forEach((obj) => {
-                if(this.isEmpty(obj)){
-                    return false
-                } else {
-                    trueCount++
-                    if(trueCount == count){
-                        return true
-                    }
+        returnUniqueJobGroupNames(csv) {
+            console.log("hello")
+            const names = csv.map((r) => r.job_group)
+            const unique = Array.from(new Set(names));
+            const result = unique.filter((n) => {
+                if(n != "" || n != undefined){
+                    return n
                 }
             })
-        }
+            return result
+        },
     }
 }
 </script>

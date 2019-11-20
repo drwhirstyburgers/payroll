@@ -8,12 +8,24 @@ module UpdateUserJg
         end
     end 
 
-    def update_job_groups(job_groups)
+    def find_if_job_group_exists_and_create_new(job_groups)
+        return_arr = []
         job_groups.each do |jg|
-            temp = JobGroup.find(jg[:id])
-            temp.wage = jg[:wage]
-            temp.save!
+            jg_check = JobGroup.find_by(name: jg)
+            if jg_check.blank?
+                new_jg = JobGroup.new(name: jg)
+                new_jg.save!
+                return_arr << new_jg
+            end
         end
+        return return_arr
     end
 
+    def update_existing_job_groups(job_groups)
+        job_groups.each do |jg|
+            job_group = JobGroup.find(jg[:id])
+            job_group.wage = jg[:wage].to_f
+            job_group.save!
+        end
+    end
 end

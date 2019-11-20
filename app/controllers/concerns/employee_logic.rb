@@ -1,0 +1,2 @@
+module EmployeeLogic
+end

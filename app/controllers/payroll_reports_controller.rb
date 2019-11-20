@@ -20,7 +20,7 @@ class PayrollReportsController < ApplicationController
   # GET /payroll_reports/1.json
   def show
     @payroll_report = PayrollReport.includes(:rows).find(params[:id])
-    @row_data = @payroll_report.rows
+    @row_data = @payroll_report.rows.order(:id)
   end
 
   # GET /payroll_reports/new
@@ -40,31 +40,20 @@ class PayrollReportsController < ApplicationController
     csv = eval(csv)
 
     report_id = get_report_id(csv)
-    # report_uniq_check = PayrollReport.find_by(report_id: report_id)
-    #if report_uniq_check.present?
-    #  render json: "exists".to_json, status: :unprocessable_entity
-    #else
+    report_uniq_check = PayrollReport.find_by(report_id: report_id)
+    if report_uniq_check.present?
+      render json: "exists".to_json, status: :unprocessable_entity
+    else
       @payroll_report = PayrollReport.new(name: name, report_id: report_id)
       
-      employee_ids = get_employee_ids(csv)
-      generate_new_employees(employee_ids)
-
       organize_report(csv, @payroll_report)
-
-      job_groups = get_job_groups(csv)
-      new_job_groups = generate_new_job_groups(job_groups)
-
-      if new_job_groups.present?
-        json_payload = {:new_job_groups => new_job_groups, :report_id => @payroll_report.id }
-        render json: json_payload.to_json, status: :ok
+      
+      if @payroll_report.save!
+        redirect_to payroll_reports_path
       else
-        if @payroll_report.save!
-          redirect_to payroll_reports_path
-        else
-          render :new
-        end
+        render :new
       end
-    #end
+    end
   end
 
   # PATCH/PUT /payroll_reports/1
@@ -91,13 +80,23 @@ class PayrollReportsController < ApplicationController
     end
   end
 
-  def return_data
-    report = PayrollReport.find(params[:report_id])
+  def check_job_groups
+    job_groups = params[:job_groups]
+
+    new_job_groups = find_if_job_group_exists_and_create_new(job_groups)
+
+    if new_job_groups.present?
+      render json: new_job_groups.to_json, status: :ok
+    else
+      render json: "exists".to_json, status: :ok
+    end
+  end
+
+  def update_job_groups
     job_groups = eval(params[:job_groups])
-
-    update_job_groups(job_groups)
-
-    redirect_to payroll_reports_path
+    puts job_groups
+    update_existing_job_groups(job_groups)
+    render json: "done".to_json, status: :ok
   end
 
   def get_data
@@ -105,7 +104,7 @@ class PayrollReportsController < ApplicationController
     wage_data = returns_all_calculations_as_hash(@report_data)
     return_hash = {}
     return_hash[:wage_data] = wage_data
-    return_hash[:report_data] = @report_data
+    return_hash[:report_data] = @report_data.order(:employee_id)
     render json: return_hash.to_json, status: :ok
   end
 

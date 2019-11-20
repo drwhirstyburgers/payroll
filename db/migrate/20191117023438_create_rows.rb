@@ -6,6 +6,7 @@ class CreateRows < ActiveRecord::Migration[6.0]
       t.float :amount_paid
       t.integer :employee_id
       t.string :job_group
+      t.float :total_hours_worked
 
       t.timestamps
     end

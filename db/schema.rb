@@ -17,6 +17,8 @@ ActiveRecord::Schema.define(version: 2019_11_17_213628) do
 
   create_table "employees", force: :cascade do |t|
     t.integer "employee_id"
+    t.float "sum_of_hours", default: 0.0
+    t.float "sum_of_wages", default: 0.0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -41,6 +43,7 @@ ActiveRecord::Schema.define(version: 2019_11_17_213628) do
     t.float "amount_paid"
     t.integer "employee_id"
     t.string "job_group"
+    t.float "total_hours_worked"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["payroll_report_id"], name: "index_rows_on_payroll_report_id"

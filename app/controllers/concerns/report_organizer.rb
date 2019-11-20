@@ -1,5 +1,5 @@
 module ReportOrganizer
-    DATE_MONTH_NAMES = I18n.t("date.month_names")
+
     def organize_report(csv, payroll_report)
         new_report = []
         sorted_by_date = sort_data_by_date(csv)
@@ -29,7 +29,6 @@ module ReportOrganizer
                 if m == 2
                     last_day += 1
                 end
-                last_half = last_day - 15
                 first_half = sorted_by_employee[e].select { |d| d[:date].day.between?(1, 15) && d[:date].month == m }
                 first_half.each do |r|
                     year = r[:date].year
@@ -97,8 +96,9 @@ module ReportOrganizer
             temp = {}
             temp[:range] = r[:range]
             temp[:employee_id] = r[:employee_id]
-            temp[:amount_paid] = r[:hours_worked] * job_group.wage
+            temp[:amount_paid] = r[:hours_worked] * job_group.wage if r[:hours_worked] != nil
             temp[:job_group] = job_group.name
+            temp[:total_hours_worked] = r[:hours_worked]
             return_arr << temp
         end
         return return_arr.uniq
@@ -109,7 +109,7 @@ module ReportOrganizer
     def create_row(csv_row, payroll_report)
         #date = convert_date(csv_row[:date])
         #convert_date(date)
-        row = payroll_report.rows.build(pay_period: csv_row[:range], employee_id: csv_row[:employee_id], amount_paid: csv_row[:amount_paid], job_group: csv_row[:job_group])
+        row = payroll_report.rows.build(pay_period: csv_row[:range], employee_id: csv_row[:employee_id], amount_paid: csv_row[:amount_paid], job_group: csv_row[:job_group], total_hours_worked: csv_row[:total_hours_worked])
         row.save!
     end
     
