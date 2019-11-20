@@ -8,29 +8,30 @@
     </div>
     <div class="card">
       <div class="card-body">
-        <h6>Total hours: <%= @employee_information[:all_hours] %></h6>
         <h6>Job Group: <%= @employee_information[:wage_group].name %></h6>
         <h6>Wage: $<%= @employee_information[:wage_group].wage %>/hour</h6>
+        <h6>Total hours: <%= @employee_information[:all_hours] %></h6>
         <h6>Total paid: $<%= @employee_information[:total_paid] %></h6>
-      </div>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Employee ID</th>
-            <th scope="col">Pay Period</th>
-            <th scope="col">Amount Paid</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @rows.each do |r| %>
+        <br />
+        <table class="table">
+          <thead class="thead-dark">
             <tr>
-              <td><%= r.employee_id %></td>
-              <td><%= r.pay_period %></td>
-              <td><%= r.amount_paid %></td>
+              <th scope="col">Employee ID</th>
+              <th scope="col">Pay Period</th>
+              <th scope="col">Amount Paid</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @rows.each do |r| %>
+              <tr>
+                <td><%= r.employee_id %></td>
+                <td><%= r.pay_period %></td>
+                <td><%= r.amount_paid %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
