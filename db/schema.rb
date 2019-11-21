@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2019_11_17_213628) do
 
   create_table "job_groups", force: :cascade do |t|
     t.string "name"
-    t.float "wage", default: 0.0
+    t.float "wage"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
